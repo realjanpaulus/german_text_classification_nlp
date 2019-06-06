@@ -1,0 +1,8 @@
+matplotlib
+nltk
+numpy
+pandas
+scikit-learn
+scipy
+Wikipedia-API
+
