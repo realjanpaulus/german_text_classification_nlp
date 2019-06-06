@@ -2,7 +2,7 @@
 import wikipediaapi
 import pandas as pd
 from nltk import word_tokenize
-from text_classfication_nlp import parserutils, postprocessing
+#from text_classfication_nlp import parserutils, postprocessing
 import json
 
 #%%
