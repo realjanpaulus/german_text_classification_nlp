@@ -1,6 +1,7 @@
 #%%
 import wikipediaapi
 from nltk import word_tokenize
+from src.data_generation import parserutils
 
 import pandas as pd
 import json
@@ -15,15 +16,28 @@ formatter = logging.Formatter("%(levelname)s: %(message)s")
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
+with Path("data/wikicategories.json").open('r', encoding="utf-8") as f:
+    wikicategories = json.load(f)
 
+#TODO: weg und funktion lsit wegmachen
+#TODO: info request output was das?
+unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
+wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
+wikicategories = {"Kategorie:Wirtschaft":['Kategorie:Arbeitswelt',
+ 'Kategorie:Betriebsstätte',
+ 'Kategorie:Bildung (Wirtschaft)',
+ 'Kategorie:Einkommen']}
+categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240) 
+
+
+#%%
 def main():    
     ### loading categories from JSON-file ###
-    with Path(args.categories_path).open('r', encoding="utf-8") as f:
+    with Path(args.path).open('r', encoding="utf-8") as f:
         wikicategories = json.load(f)
         logging.info("Successfully loaded the JSON-File.")
-        
     
-    
+  
     wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
     dfcolumns = ["category", "summary", "text"]
     unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
@@ -34,6 +48,17 @@ def main():
     #TODO: create parserutils 
     #categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240)
     logging.info("Successfully generated lists of the articles.")
+    
+
+    #TODO: weg
+    import pandas as pd
+    dic = {"article_title1":{"category":"a", "text":"ich bin a", "length": 3}, 
+           "article_title2":{"category":"b", "text":"doch ich bin b", "length":4}}
+    
+    l = [v for k, v in dic.items()]
+    df = pd.DataFrame(l)
+    print(df)
+    
     
     
     ### saving categories list to csv ###
@@ -52,7 +77,7 @@ def main():
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(prog="wikiparser", description="Tool to create a corpus of Wikipedia articles based on Wikipedia categories.")
-    parser.add_argument("--categories_path", "-cp", help="JSON-File with the dictionary of the Wikipedia categories.")
+    parser.add_argument("--path", "-p", help="Path to the JSON-File which contains the dictionary of the Wikipedia categories.")
     parser.add_argument("--tokenization", "-t", type=bool, help="Indicates if the articles should be tokenized or not.")
     parser.add_argument("--only_german", "-g", type=bool, help="Indicates if given german translations should replace the original phrases.")
     parser.add_argument("--no_latin", "-l", type=bool, help="Indicates if non-latin characters should be removed.")
