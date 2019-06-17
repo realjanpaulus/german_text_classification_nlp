@@ -2,7 +2,6 @@
 import wikipediaapi
 from nltk import word_tokenize
 from src.data_generation import parserutils
-
 import pandas as pd
 import json
 from pathlib import Path
@@ -27,6 +26,7 @@ wikicategories = {"Kategorie:Wirtschaft":['Kategorie:Arbeitswelt',
  'Kategorie:Betriebsstätte',
  'Kategorie:Bildung (Wirtschaft)',
  'Kategorie:Einkommen']}
+wikicategories = {"Kategorie:Wirtschaft":['Kategorie:Einkommen', 'Kategorie:Betriebsstätte']}
 categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240) 
 
 
