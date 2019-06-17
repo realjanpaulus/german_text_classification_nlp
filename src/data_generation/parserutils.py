@@ -1,5 +1,7 @@
 from nltk import word_tokenize
 import itertools
+import logging
+from progressbar import ProgressBar, Percentage, Bar
 
 
 def extracting_section(unnecessary_sections, sections, level=0):
@@ -98,13 +100,19 @@ def generate_categories(wikipedia, categories, unnecessary_sections,
 
     articles = {}
 
-    for category_name, subcategories in categories.items():
+    for idx, (category_name, subcategories) in enumerate(categories.items()):
         article_counter = 0
+
         for subcategory in subcategories:
-            if article_counter == max_articles:
+            if article_counter >= max_articles:
                 break
             category = wikipedia.page(subcategory)
-            for article in category.categorymembers.values():
+
+            sub_pbar = ProgressBar(widgets=[f"\n{category_name}: ",
+                                            Percentage(), Bar()])
+            for article in sub_pbar(category.categorymembers.values()):
+                if article_counter >= max_articles:
+                    break
                 # articles which aren't real articles but a list of articles
                 # will be skipped
                 if article.ns == 0 and ("Liste von" not in article.title
@@ -117,4 +125,6 @@ def generate_categories(wikipedia, categories, unnecessary_sections,
                         articles[article.title] = article_dict
                         article_counter += 1
 
+        logging.info(f"\n{10*'-'}\n{idx+1} of \
+                     {len(categories)} categories loaded.\n{10*'-'}")
     return articles
