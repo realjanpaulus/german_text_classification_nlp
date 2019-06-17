@@ -2,7 +2,9 @@ matplotlib
 nltk
 numpy
 pandas
+progressbar33
 scikit-learn
 scipy
+requests
 Wikipedia-API
 
