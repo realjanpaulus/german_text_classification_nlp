@@ -3,10 +3,25 @@ import wikipediaapi
 from nltk import word_tokenize
 from src.data_generation import parserutils
 import pandas as pd
+import numpy as np
 import json
 from pathlib import Path
 import argparse
 import logging
+import sys
+import time
+
+
+### wikipediaapi logging handler ###
+
+wikipediaapi.log.setLevel(level=wikipediaapi.logging.WARNING)
+out_hdlr = wikipediaapi.logging.StreamHandler(sys.stderr)
+out_hdlr.setFormatter(wikipediaapi.logging.Formatter('%(asctime)s %(message)s'))
+out_hdlr.setLevel(wikipediaapi.logging.WARNING)
+wikipediaapi.log.addHandler(out_hdlr)
+
+
+### wikiparser logging handler ###
 
 logging.basicConfig(level=logging.INFO, filename="wikiparser.log", filemode="w")
 console = logging.StreamHandler()
@@ -15,63 +30,41 @@ formatter = logging.Formatter("%(levelname)s: %(message)s")
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
-with Path("data/wikicategories.json").open('r', encoding="utf-8") as f:
-    wikicategories = json.load(f)
 
-#TODO: weg und funktion lsit wegmachen
-#TODO: info request output was das?
-unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
-wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
-wikicategories = {"Kategorie:Wirtschaft":['Kategorie:Arbeitswelt',
- 'Kategorie:Betriebsstätte',
- 'Kategorie:Bildung (Wirtschaft)',
- 'Kategorie:Einkommen']}
-wikicategories = {"Kategorie:Wirtschaft":['Kategorie:Einkommen', 'Kategorie:Betriebsstätte']}
-categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240) 
-
-
-#%%
-def main():    
+def main():   
+    
+    st = time.time()
+    
     ### loading categories from JSON-file ###
     with Path(args.path).open('r', encoding="utf-8") as f:
         wikicategories = json.load(f)
-        logging.info("Successfully loaded the JSON-File.")
+        logging.info(f"Successfully loaded the categories from the JSON-File.")
     
-  
-    wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
-    dfcolumns = ["category", "summary", "text"]
-    unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
+    wikipedia = wikipediaapi.Wikipedia('de', extract_format
+                                       =wikipediaapi.ExtractFormat.WIKI)
+    unnecessary_sections = ["Literatur", "Weblinks", 
+                            "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
     
-    ### generating categories list ###
+    ### generating categories dictionary ###
     
-    #TODO: generate_categories_list
-    #TODO: create parserutils 
-    #categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240)
-    logging.info("Successfully generated lists of the articles.")
+    #TODO: max articles argparse
+    #TODO: cutting articles to 200
+    categories = parserutils.generate_categories(wikipedia,
+                                                      wikicategories,
+                                                      unnecessary_sections,
+                                                      max_articles=10)
+    logging.info(f"Successfully generated lists of the articles (time: {int((time.time() - st) / 60)} minutes).")
     
+    ### generating dataframe and saving csv###
+    
+    df = pd.DataFrame([v for k, v in categories.items()])
+    logging.info(f"Successfully generated the dataframe (time: {int((time.time() - st))} seconds).")
+    
+    csv_name = "data/corpus.csv"
+    df.to_csv(f"{csv_name}")
 
-    #TODO: weg
-    import pandas as pd
-    dic = {"article_title1":{"category":"a", "text":"ich bin a", "length": 3}, 
-           "article_title2":{"category":"b", "text":"doch ich bin b", "length":4}}
-    
-    l = [v for k, v in dic.items()]
-    df = pd.DataFrame(l)
-    print(df)
-    
-    
-    
-    ### saving categories list to csv ###
-
-    #TODO: dataframe saving
-    #TODO: optional post-processing
-    #df = pd.DataFrame(columns=dfcolumns)
-    """for idx, l in enumerate(categories_list):
-        tmpdf = pd.DataFrame.from_records(l, columns=dfcolumns)
-        df = df.append(tmpdf)"""
-    #df.to_csv("data/corpora/wikicatcorpus_v2.csv", index=False)
-    logging.info("Successfully saved the articles to a csv file.") #TODO: hinweis, wo gespeichert
-
+    logging.info(f"Successfully saved the articles to the csv file '{csv_name}' (time: {int((time.time() - st))} seconds).")
+    logging.info(f"Total runtime: {np.around((time.time() - st) / 60, decimals=2)} minutes.")
     
 
 if __name__ == "__main__":
@@ -121,7 +114,7 @@ with open('data/wikicategories.json', 'r') as f:
 # creating the corpus
 #####
 #max = 240 because of possible duplicates
-categories_list = parserutils.generate_categories_list(wikipedia, wikicategories, unnecessary_sections, max_articles=240)
+categories_list = parserutils.generate_categories(wikipedia, wikicategories, unnecessary_sections, max_articles=240)
 
 df = pd.DataFrame(columns=dfcolumns)
     
