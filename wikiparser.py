@@ -10,6 +10,7 @@ import argparse
 import logging
 import sys
 import time
+import datetime
 
 
 ### wikipediaapi logging handler ###
@@ -31,7 +32,32 @@ console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
 
 
+#%%
+
+
 def main():   
+    
+    ### hyperparams ###
+    wikipedia = wikipediaapi.Wikipedia('de', extract_format
+                                       =wikipediaapi.ExtractFormat.WIKI)
+    unnecessary_sections = ["Literatur", "Weblinks", 
+                            "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
+    
+    #TODO: eleganterer Weg?
+    if args.save_date:
+        now = datetime.datetime.now()
+        if now.minute < 10:
+            minute = f"0{now.minute}"
+        else:
+            minute = now.minute
+        if now.month < 10:
+            month = f"0{now.month}"
+        else:
+            month = now.month
+        year = str(now.year)[2:]
+        csv_name = f"data/wikicorpus ({now.day}.{month}.{year}_{now.hour}:{minute}).csv"
+    else:    
+        csv_name = "data/wikicorpus.csv"
     
     st = time.time()
     
@@ -40,19 +66,18 @@ def main():
         wikicategories = json.load(f)
         logging.info(f"Successfully loaded the categories from the JSON-File.")
     
-    wikipedia = wikipediaapi.Wikipedia('de', extract_format
-                                       =wikipediaapi.ExtractFormat.WIKI)
-    unnecessary_sections = ["Literatur", "Weblinks", 
-                            "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
-    
     ### generating categories dictionary ###
     
     #TODO: max articles argparse
     #TODO: cutting articles to 200
+    if args.max_articles is not None:
+        max_articles = args.max_articles
+    else:
+        max_articles=240
     categories = parserutils.generate_categories(wikipedia,
                                                       wikicategories,
                                                       unnecessary_sections,
-                                                      max_articles=10)
+                                                      max_articles=max_articles)
     logging.info(f"Successfully generated lists of the articles (time: {int((time.time() - st) / 60)} minutes).")
     
     ### generating dataframe and saving csv###
@@ -60,7 +85,6 @@ def main():
     df = pd.DataFrame([v for k, v in categories.items()])
     logging.info(f"Successfully generated the dataframe (time: {int((time.time() - st))} seconds).")
     
-    csv_name = "data/corpus.csv"
     df.to_csv(f"{csv_name}")
 
     logging.info(f"Successfully saved the articles to the csv file '{csv_name}' (time: {int((time.time() - st))} seconds).")
@@ -76,9 +100,12 @@ if __name__ == "__main__":
     parser.add_argument("--no_latin", "-l", type=bool, help="Indicates if non-latin characters should be removed.")
     parser.add_argument("--no_umlauts", "-u", type=bool, help="Indicates if umlauts should be replaced.")
     parser.add_argument("--postprocessing", "-pp", type=bool, help="Indicates if general postprocessing should be applied.")
+    parser.add_argument("--max_articles", "-ma", type=int, help="Sets the maximum of articles per category.")
+    parser.add_argument("--save_date", "-sd", action="store_true", help="Indicates if the generation date of the corpus should be saved.")
+    args = parser.parse_args()
     #TODO: bearbeite arguments
     #TODO: birth death dates wieder rausnehmen
-    args = parser.parse_args()
+    
     
 
     ### main ###
@@ -91,38 +118,6 @@ if __name__ == "__main__":
 """
 """
 
-import wikipediaapi
-import pandas as pd
-from nltk import word_tokenize
-#from text_classfication_nlp import parserutils, postprocessing
-import json
-
-#%%
-#####
-# loading categories
-#####
-
-wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
-
-dfcolumns = ["category", "summary", "text"]
-unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
-
-with open('data/wikicategories.json', 'r') as f:
-    wikicategories = json.load(f)
-#%%
-#####
-# creating the corpus
-#####
-#max = 240 because of possible duplicates
-categories_list = parserutils.generate_categories(wikipedia, wikicategories, unnecessary_sections, max_articles=240)
-
-df = pd.DataFrame(columns=dfcolumns)
-    
-for idx, l in enumerate(categories_list):
-    tmpdf = pd.DataFrame.from_records(l, columns=dfcolumns)
-    df = df.append(tmpdf)
-
-df.to_csv("data/corpora/wikicatcorpus_v2.csv", index=False)
 #%%
 #####
 # dropping duplicates and reducing the count of every article per catgory to 200
