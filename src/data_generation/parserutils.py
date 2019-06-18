@@ -125,6 +125,6 @@ def generate_categories(wikipedia, categories, unnecessary_sections,
                         articles[article.title] = article_dict
                         article_counter += 1
 
-        logging.info(f"\n{10*'-'}\n{idx+1} of \
-                     {len(categories)} categories loaded.\n{10*'-'}")
+        logging.info((f"\n\n{10*'-'}\n{idx+1} of "
+                     f"{len(categories)} categories loaded.\n{10*'-'}"))
     return articles
