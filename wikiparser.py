@@ -36,6 +36,10 @@ logging.getLogger('').addHandler(console)
 
 
 def main():   
+    ### loading categories from JSON-file ###
+    with Path(args.path).open('r', encoding="utf-8") as f:
+        wikicategories = json.load(f)
+        logging.info(f"Successfully loaded the categories from the JSON-File.")
     
     ### hyperparams ###
     wikipedia = wikipediaapi.Wikipedia('de', extract_format
@@ -43,6 +47,14 @@ def main():
     unnecessary_sections = ["Literatur", "Weblinks", 
                             "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
     
+    
+    if len(wikicategories) <= 10:
+        csv_name = "data/smallwikicorpus"
+    elif len(wikicategories) > 10 and len(wikicategories) <= 50:
+        csv_name = "data/wikicorpus"
+    else:
+        csv_name = "data/bigwikicorpus"
+        
     #TODO: eleganterer Weg?
     if args.save_date:
         now = datetime.datetime.now()
@@ -55,16 +67,14 @@ def main():
         else:
             month = now.month
         year = str(now.year)[2:]
-        csv_name = f"data/wikicorpus ({now.day}.{month}.{year}_{now.hour}:{minute}).csv"
-    else:    
-        csv_name = "data/wikicorpus.csv"
+        csv_name += f" ({now.day}.{month}.{year}_{now.hour}:{minute}).csv"
+    else:
+        csv_name += ".csv"
+        
     
     st = time.time()
     
-    ### loading categories from JSON-file ###
-    with Path(args.path).open('r', encoding="utf-8") as f:
-        wikicategories = json.load(f)
-        logging.info(f"Successfully loaded the categories from the JSON-File.")
+    
     
     ### generating categories dictionary ###
     
