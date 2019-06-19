@@ -1,6 +1,4 @@
-#%%
 import wikipediaapi
-from nltk import word_tokenize
 from src.data_generation import parserutils
 import pandas as pd
 import numpy as np
@@ -10,11 +8,10 @@ import argparse
 import logging
 import sys
 import time
-import datetime
+from datetime import datetime
 
 
 ### wikipediaapi logging handler ###
-
 wikipediaapi.log.setLevel(level=wikipediaapi.logging.WARNING)
 out_hdlr = wikipediaapi.logging.StreamHandler(sys.stderr)
 out_hdlr.setFormatter(wikipediaapi.logging.Formatter('%(asctime)s %(message)s'))
@@ -23,16 +20,12 @@ wikipediaapi.log.addHandler(out_hdlr)
 
 
 ### wikiparser logging handler ###
-
 logging.basicConfig(level=logging.INFO, filename="wikiparser.log", filemode="w")
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 formatter = logging.Formatter("%(levelname)s: %(message)s")
 console.setFormatter(formatter)
 logging.getLogger('').addHandler(console)
-
-
-#%%
 
 
 def main():   
@@ -55,19 +48,8 @@ def main():
     else:
         csv_name = "data/bigwikicorpus"
         
-    #TODO: eleganterer Weg?
     if args.save_date:
-        now = datetime.datetime.now()
-        if now.minute < 10:
-            minute = f"0{now.minute}"
-        else:
-            minute = now.minute
-        if now.month < 10:
-            month = f"0{now.month}"
-        else:
-            month = now.month
-        year = str(now.year)[2:]
-        csv_name += f" ({now.day}.{month}.{year}_{now.hour}:{minute}).csv"
+        csv_name += f"{datetime.now():%d.%m.%y}_{datetime.now():%H:%M}.csv"
     else:
         csv_name += ".csv"
         
@@ -113,7 +95,6 @@ if __name__ == "__main__":
     parser.add_argument("--max_articles", "-ma", type=int, help="Sets the maximum of articles per category.")
     parser.add_argument("--save_date", "-sd", action="store_true", help="Indicates if the generation date of the corpus should be saved.")
     args = parser.parse_args()
-    #TODO: bearbeite arguments
     #TODO: birth death dates wieder rausnehmen
     
     
