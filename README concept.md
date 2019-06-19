@@ -1,11 +1,12 @@
-# German Text Classification based on Wikipedia Articles
+﻿# German Text Classification based on Wikipedia Articles
 
 description
 
 
 ## Getting Started
 
-...
+…
+TODO: anmerken, dass mehr als 240 Artikel für 200 Artikel, wegen Duplikate etc.
 
 ## Features
 
