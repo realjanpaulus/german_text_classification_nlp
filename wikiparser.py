@@ -20,7 +20,7 @@ wikipediaapi.log.addHandler(out_hdlr)
 
 
 ### wikiparser logging handler ###
-logging.basicConfig(level=logging.INFO, filename="wikiparser.log", filemode="w")
+logging.basicConfig(level=logging.INFO, filename="logs/wikiparser.log", filemode="w")
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 formatter = logging.Formatter("%(levelname)s: %(message)s")
@@ -35,10 +35,8 @@ def main():
         logging.info(f"Successfully loaded the categories from the JSON-File.")
     
     ### hyperparams ###
-    wikipedia = wikipediaapi.Wikipedia('de', extract_format
-                                       =wikipediaapi.ExtractFormat.WIKI)
-    unnecessary_sections = ["Literatur", "Weblinks", 
-                            "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
+    wikipedia = wikipediaapi.Wikipedia('de', extract_format=wikipediaapi.ExtractFormat.WIKI)
+    unnecessary_sections = ["Literatur", "Weblinks", "Einzelnachweis", "Einzelnachweise", "Siehe auch"]
     
     
     if len(wikicategories) <= 10:
@@ -53,10 +51,7 @@ def main():
     else:
         csv_name += ".csv"
         
-    
     st = time.time()
-    
-    
     
     ### generating categories dictionary ###
     if args.max_articles is not None:
