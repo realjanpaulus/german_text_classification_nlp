@@ -1,9 +1,13 @@
 #%%
 import re
-import pandas as pd
 from nltk import word_tokenize
 
 ### Helper functions ###
+
+def hasNumbers(string):
+    """Returns True if the string contains a number."""
+    return any(char.isdigit() for char in string)
+
 
 def load_dic(path="data/german.dic", encoding="ISO-8859-1"):
     """Returns a set with german dictionary words.
@@ -26,11 +30,6 @@ def load_dic(path="data/german.dic", encoding="ISO-8859-1"):
     return set(germandic)
 
 
-def hasNumbers(string):
-    """Returns True if the string contains a number."""
-    return any(char.isdigit() for char in string)
-
-
 def find_foreign_phrase(string, dic):
     """Finds the foreign phrase in front of the parentheses, removes everything
         before the phrase and returns the leftover.
@@ -40,7 +39,7 @@ def find_foreign_phrase(string, dic):
         dic (set): Set with dictionary words as strings.
     Returns:
         String without the words before the foreign phrase in front of the
-        parantheses.
+        parantheses.'
     """
     foreign_words = []
     for idx, word in enumerate(word_tokenize(string)):
@@ -86,25 +85,11 @@ def remove_nonlatin(text):
     
     return new_text
 
-def replace_umlauts(text):
-    """Replaces german umlauts in a string.
-    
-    Args:
-        text (string): String with umlaut-substrings.
-    Returns:
-        String with replaced umlaut-substrings
-    """
-    replaced_text = text.replace('ä', 'ae')
-    replaced_text = replaced_text.replace('ö', 'oe')
-    replaced_text = replaced_text.replace('ü', 'ue')
-    replaced_text = replaced_text.replace('Ä', 'Ae')
-    replaced_text = replaced_text.replace('Ö', 'Oe')
-    replaced_text = replaced_text.replace('Ü', 'Ue')
-    replaced_text = replaced_text.replace('ß', 'ss')
-    
-    return replaced_text
+def remove_doubleequalsigns(string):
+    """Removes the doubled equal from a string."""
+    return re.sub("== .*? ==|==", "", string)
 
-def replace_german_translation(text, dic):
+def replace_foreign_phrase(text, dic):
     """Removes foreign terms or phrases when their german translation is given 
         in parantheses.
     
@@ -133,20 +118,25 @@ def replace_german_translation(text, dic):
     else:
         return text
 
-
-#%%
+def replace_umlauts(text):
+    """Replaces german umlauts in a string.
     
-dic = load_dic()
-s = 'An mehreren Stellen what is it im Film ist der Satz Who watches the Watchmen (zu deutsch: "Wer überwacht die Wächter?") zu sehen.'
+    Args:
+        text (string): String with umlaut-substrings.
+    Returns:
+        String with replaced umlaut-substrings
+    """
+    replaced_text = text.replace('ä', 'ae')
+    replaced_text = replaced_text.replace('ö', 'oe')
+    replaced_text = replaced_text.replace('ü', 'ue')
+    replaced_text = replaced_text.replace('Ä', 'Ae')
+    replaced_text = replaced_text.replace('Ö', 'Oe')
+    replaced_text = replaced_text.replace('Ü', 'Ue')
+    replaced_text = replaced_text.replace('ß', 'ss')
+    
+    return replaced_text
 
 
-print(find_foreign_phrase(s, dic))
-print("\n")
-print(only_german_translation(s, dic))
-print("\n")
-s = "sddsd † “ sddsd dsdd sd"
-print(remove_nonlatin(s))
-
-
-
-
+def tokenize(text):
+    """Splits the text into tokens."""
+    return " ".join(word_tokenize(text))

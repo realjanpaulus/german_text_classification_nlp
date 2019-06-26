@@ -2,6 +2,8 @@ import argparse
 
 def main():   
     ...
+    dic = load_dic()
+    s = 'An mehreren Stellen == hallo == what is it im Film ist der Satz "Who watches the Watchmen" (zu deutsch: "Wer überwacht die Wächter?") zu sehen.'
 
 
 if __name__ == "__main__":
