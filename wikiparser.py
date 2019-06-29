@@ -1,4 +1,5 @@
 import wikipediaapi
+#TODO: src weg und setup.py
 from src.data_generation import parserutils
 import pandas as pd
 import numpy as np
@@ -47,7 +48,7 @@ def main():
         csv_name = "data/bigwikicorpus"
         
     if args.save_date:
-        csv_name += f"{datetime.now():%d.%m.%y}_{datetime.now():%H:%M}.csv"
+        csv_name += f" ({datetime.now():%d.%m.%y}_{datetime.now():%H:%M}).csv"
     else:
         csv_name += ".csv"
         
@@ -77,7 +78,7 @@ def main():
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(prog="wikiparser", description="Tool to create a corpus of Wikipedia articles based on Wikipedia categories.")
-    parser.add_argument("--path", "-p", help="Path to the JSON-File which contains the dictionary of the Wikipedia categories.")
+    parser.add_argument("path", type=str, help="Path to the JSON-File which contains the dictionary of the Wikipedia categories.")
     parser.add_argument("--max_articles", "-ma", type=int, help="Sets the maximum of articles per category.")
     parser.add_argument("--save_date", "-sd", action="store_true", help="Indicates if the generation date of the corpus should be saved.")
     args = parser.parse_args()
