@@ -1,6 +1,7 @@
 #%%
 import re
 from nltk import word_tokenize
+import pandas as pd
 
 ### Helper functions ###
 
@@ -30,7 +31,7 @@ def load_dic(path="data/german.dic", encoding="ISO-8859-1"):
     return set(germandic)
 
 
-def find_foreign_phrase(string, dic):
+def find_foreign_phrase(string, dic=load_dic()):
     """Finds the foreign phrase in front of the parentheses, removes everything
         before the phrase and returns the leftover.
     
@@ -89,7 +90,7 @@ def remove_doubleequalsigns(string):
     """Removes the doubled equal from a string."""
     return re.sub("== .*? ==|==", "", string)
 
-def replace_foreign_phrase(text, dic):
+def replace_foreign_phrase(text, dic=load_dic()):
     """Removes foreign terms or phrases when their german translation is given 
         in parantheses.
     
@@ -118,6 +119,7 @@ def replace_foreign_phrase(text, dic):
     else:
         return text
 
+
 def replace_umlauts(text):
     """Replaces german umlauts in a string.
     
@@ -140,3 +142,29 @@ def replace_umlauts(text):
 def tokenize(text):
     """Splits the text into tokens."""
     return " ".join(word_tokenize(text))
+
+
+def unify_articles_amount(df, columns=["category", "length", "text"]):
+    """Takes a DataFrame with the column 'category', finds the minimum value
+        of the number of articles per category and unifies the amount of 
+        articles per category based on the minimum value.
+        
+    Args:
+        df (DataFrame): DataFrame with the column 'category'.
+        columns (list): List of the column names.
+    Returns:
+        DataFrame with an unified amount of articles per category.
+    """
+    d = df["category"].value_counts().to_dict()
+    min_value = d[min(d, key=d.get)]
+    
+    actual_category = ""
+    new_df = pd.DataFrame(columns=columns)
+    df = df.sort_values(by=["category"])
+    for idx, category in enumerate(df["category"]):
+        if actual_category != category:
+            actual_category = category
+            new_df = new_df.append(df.loc[df["category"] == category][0:min_value], sort=False)
+    
+    return new_df.drop_duplicates()
+    
