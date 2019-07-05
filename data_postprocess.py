@@ -42,9 +42,11 @@ def main():
         methods += "-gt"
         
     if args.save_methods:
-        corpus.to_csv(args.path[:-4] + "_v2 (" + methods + ").csv")
+        corpus = corpus.rename(columns={"Unnamed: 0": "id"})
+        corpus.to_csv(args.path[:-4] + "_v2 (" + methods + ").csv", index=False)
     else:
-        corpus.to_csv(args.path[:-4] + "_v2" + ".csv")
+        corpus = corpus.rename(columns={"Unnamed: 0": "id"})
+        corpus.to_csv(args.path[:-4] + "_v2" + ".csv", index=False)
         
 
 if __name__ == "__main__":

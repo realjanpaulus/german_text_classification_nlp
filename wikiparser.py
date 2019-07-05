@@ -41,11 +41,11 @@ def main():
     
     
     if len(wikicategories) <= 10:
-        csv_name = "data/smallwikicorpus"
+        csv_name = "data/corpora/smallwikicorpus"
     elif len(wikicategories) > 10 and len(wikicategories) <= 50:
-        csv_name = "data/wikicorpus"
+        csv_name = "data/corpora/wikicorpus"
     else:
-        csv_name = "data/bigwikicorpus"
+        csv_name = "data/corpora/bigwikicorpus"
         
     if args.save_date:
         csv_name += f" ({datetime.now():%d.%m.%y}_{datetime.now():%H:%M}).csv"
@@ -69,7 +69,8 @@ def main():
     df = pd.DataFrame([v for k, v in categories.items()])
     logging.info(f"Successfully generated the dataframe (time: {int((time.time() - st))} seconds).")
     
-    df.to_csv(f"{csv_name}")
+    df = df.rename(columns={"Unnamed: 0": "id"})
+    df.to_csv(f"{csv_name}", index=False)
 
     logging.info(f"Successfully saved the articles to the csv file '{csv_name}' (time: {int((time.time() - st))} seconds).")
     logging.info(f"Total runtime: {np.around((time.time() - st) / 60, decimals=2)} minutes.")

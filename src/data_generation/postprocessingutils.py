@@ -62,6 +62,7 @@ def find_foreign_phrase(string, dic=load_dic()):
     return string[string.find(last_phrase_word):]
 
 ### postprocessing functions ###
+  
     
 def remove_nonlatin(text):
     """Removes non-latin characters and replaces some non-latin characters 
