@@ -5,6 +5,7 @@ pandas
 progressbar33
 scikit-learn
 scipy
+seaborn
 requests
 Wikipedia-API
 
