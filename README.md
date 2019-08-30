@@ -13,7 +13,7 @@ Required: Python 3.6+
 ### Wikiparser
 ```
 $ python wikiparser.py --help
-usage: path [-h] [--max_articles MAX_ARTICLES] [--save_date SAVE_DATE]
+usage: path [-h] [--max_articles MAX_ARTICLES] [--save_date]
 
 optional arguments:
 -h, --help            show this help message and exit
@@ -22,6 +22,22 @@ optional arguments:
 
 ```
 
+### Data Postprocess
+```
+$ python data_postprocess.py --help
+usage: path [-h] [--drop_duplicates] [--unify_articles_amount] [--tokenization] [--german_translation] [--nonlation] [--no_umlauts] [--save_methods]
+
+optional arguments:
+-h, --help                      show this help message and exit
+--drop_duplicates, -dd",        indicates if the duplicates should be dropped
+--unify_articles_amount, -uaa   indicates if the amount of the articles per category                                   should be unified
+--tokenization, -t              indicates if the articles should be tokenized or not
+--german_translation, -gt       indicates if given german translations should replace                                 the original phrases
+--nonlatin, -nl                 indicates if non-latin characters should be removed
+--no_umlauts, -nu               indicates if umlauts should be replaced
+--save_methods, -sm             indicates if an abbreviation for the postprocessing                                   methods should be added to the output name
+    
+```
 
 ## Project Structure
 
