@@ -8,6 +8,21 @@ Required: Python 3.6+
 
 ```pip install -r requirements.txt```
 
+## Usage
+
+### Wikiparser
+```
+$ python wikiparser.py --help
+usage: path [-h] [--max_articles MAX_ARTICLES] [--save_date SAVE_DATE]
+
+optional arguments:
+-h, --help            show this help message and exit
+--max_articles, -ma   sets the maximum of articles per category
+--save_date, -sd      indicates if the generation date of the corpus should be saved
+
+```
+
+
 ## Project Structure
 
 ### data
