@@ -1,7 +1,6 @@
 # German Text Classification Tutorial Series
 
-
-Dieses Projekt besteht hauptsächlich aus einer deutschsprachigen Tutorialreihe zur Textklassifikation mit Python und deutschen Daten. 
+This project mainly consists of a german tutorial series on text classification with Python and german data. The tutorials are available as Jupyter notebooks are in the <b>tutorials</b> folder. In addition, this project contains tools for extracting articles from Wikipedia by categories. Other available tools include a post-processing tool and a text classification tool with classifier from Scikit learn.
 
 
 ## Getting Started
