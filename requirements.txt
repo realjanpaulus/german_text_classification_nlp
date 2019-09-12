@@ -1,3 +1,5 @@
+flair
+gensim
 matplotlib
 nltk
 numpy
@@ -6,6 +8,7 @@ progressbar33
 scikit-learn
 scipy
 seaborn
+spacy
 requests
 Wikipedia-API
 
