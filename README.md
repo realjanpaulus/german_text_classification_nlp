@@ -1,5 +1,8 @@
 # German Text Classification Tutorial Series
 
+[![Binder](http://mybinder.org/badge_logo.svg)](https://hub.gke.mybinder.org/user/papajan3000-ger-ssification_nlp-xyvv13xg/tree)
+
+
 This project mainly consists of a german tutorial series on text classification with Python and german data. The tutorials are available as Jupyter notebooks are in the <b>tutorials</b> folder. In addition, this project contains tools for extracting articles from Wikipedia by categories. Other available tools include a post-processing tool and a text classification tool with classifier from Scikit learn. Already prepared datasets are provided in the <b>data</b> folder. A smaller and more compact dataset is stored in the <b> dl_dataset </b> folder.
 
 ## Installation
