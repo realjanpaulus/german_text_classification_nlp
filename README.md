@@ -3,7 +3,7 @@
 [![Binder](http://mybinder.org/badge_logo.svg)](https://hub.gke.mybinder.org/user/papajan3000-ger-ssification_nlp-xyvv13xg/tree)
 
 
-This project mainly consists of a german tutorial series on text classification with Python and german data. The tutorials are available as Jupyter notebooks are in the <b>tutorials</b> folder. In addition, this project contains tools for extracting articles from Wikipedia by categories. Other available tools include a post-processing tool and a text classification tool with classifier from Scikit learn. Already prepared datasets are provided in the <b>data</b> folder. A smaller and more compact dataset is stored in the <b> dl_dataset </b> folder.
+This project mainly consists of a german tutorial series on text classification with Python and german data. The tutorials are available as Jupyter notebooks are in the <b>tutorials</b> folder. In addition, this project contains tools for extracting articles from Wikipedia by categories. Another available tool includes a post-processing tool. Already prepared datasets are provided in the <b>data</b> folder. A smaller and more compact dataset is stored in the <b> dl_dataset </b> folder.
 
 ## Installation
 
@@ -12,6 +12,8 @@ Required: Python 3.6+
 ```pip install -r requirements.txt```
 
 ## Usage
+
+For a detailed explanation of the following two tools see `tutorials/Zusatzkapitel - Wie baue ich mein eigenes Wikipediakorpus?` (only available in German).
 
 ### Wikiparser
 ```
@@ -45,13 +47,17 @@ optional arguments:
 ## Project Structure
 
 ### data
-...
 
-### dl_datasat
-...
+Corpora with german Wikipedia articles and categories as csv-files (subfolder `corpora`), JSON-files with german Wikipedia categories and subcategories and a german dictionary file.
+
+### dl_dataset
+
+Dataset for the university course "Deep Learning" (Julius-Maximilians-university, SS19).
 
 ### src
 
 <b>data_generation</b>: Module which stores all the python files for the generation of the data by parsing wikipedia articles on the basis of categories stored in wikicategories.json. The articles will be preprocessed (tokenization, removal of unnecessary parts etc.) and extracted into a csv-file with the columns "category", "summary", "text".
 
 ### tutorials
+
+German tutorial series for Text Classification with Machine Learning, Scikit learn and Deep Learning as Jupyter Notebooks.

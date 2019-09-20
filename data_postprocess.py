@@ -1,18 +1,9 @@
-#%%
-#TODO: src weg und setup.py
 from src.data_generation import postprocessingutils as ppu
-
 import argparse
 import pandas as pd
 
-
-#%%
 def main():
-    
-    #TODO: check if valid path?
-    #TODO: logging!
-    #TODO: err[501!] bei einem der Witschaftsartikel
-    
+        
     ### reading corpus ###
     corpus = pd.read_csv(args.path)
     methods = ""
