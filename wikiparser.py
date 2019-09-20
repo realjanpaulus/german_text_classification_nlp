@@ -1,5 +1,4 @@
 import wikipediaapi
-#TODO: src weg und setup.py
 from src.data_generation import parserutils
 import pandas as pd
 import numpy as np
