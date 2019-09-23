@@ -1,5 +1,6 @@
 flair
 gensim
+hyperas
 matplotlib
 nltk
 numpy
