@@ -1,6 +1,6 @@
 # German Text Classification Tutorial Series
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/papajan3000/german_text_classification_nlp/master)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/realjanpaulus/german_text_classification_nlp/master)
 
 
 This project mainly consists of a german tutorial series on text classification with Python and german data. The tutorials are available as Jupyter notebooks in the <b>tutorials</b> folder. In addition, this project contains tools for extracting articles from Wikipedia by categories and a csv-post-processing tool. Already prepared datasets are provided in the <b>data</b> folder. A smaller and more compact dataset is stored in the <b> dl_dataset </b> folder.
