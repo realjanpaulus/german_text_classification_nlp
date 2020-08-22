@@ -105,5 +105,6 @@ venv.bak/
 
 #others
 logs/wikiparser.log
+tutorials/tut5-model.pt
 .DS_Store
 
